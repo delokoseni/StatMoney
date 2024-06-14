@@ -9,6 +9,7 @@ public class LoginController {
     @GetMapping
     String show()
     {
+        System.out.println("Slava geroyam!");
         return "index";
     }
 }
