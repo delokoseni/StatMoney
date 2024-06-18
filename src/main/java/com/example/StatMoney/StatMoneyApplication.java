@@ -18,6 +18,7 @@ public class StatMoneyApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
+		//Это комментарий от Ивана Чепрасова
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
 		String encodePass = passwordEncoder.encode("maksim");
 		System.out.println("Encoded password: " + encodePass);
