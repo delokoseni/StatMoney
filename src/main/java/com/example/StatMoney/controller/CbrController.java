@@ -1,0 +1,22 @@
+package com.example.StatMoney.controller;
+
+import com.example.StatMoney.service.CbrService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/cbr")
+public class CbrController {
+
+    @Autowired
+    private CbrService cbrService;
+
+    @GetMapping("/rate/{currencyCode}")
+    public String getCurrencyRate(@PathVariable String currencyCode) {
+        return cbrService.getCurrentCurrencyRate(currencyCode);
+    }
+}
+

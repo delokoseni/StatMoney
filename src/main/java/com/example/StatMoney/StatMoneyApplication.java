@@ -1,5 +1,7 @@
 package com.example.StatMoney;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.StatMoney.service.CbrService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +12,9 @@ import java.util.Map;
 
 @SpringBootApplication
 public class StatMoneyApplication implements CommandLineRunner {
+
+	@Autowired
+	private CbrService cbrService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(StatMoneyApplication.class, args);
@@ -23,6 +28,8 @@ public class StatMoneyApplication implements CommandLineRunner {
 		System.out.println("Encoded password: " + encodePass);
 		String encodePass2 = passwordEncoder.encode("maksim");
 		System.out.println("Encoded password: " + encodePass2);
+		String cnyRate = cbrService.getCurrentCurrencyRate("CNY");
+		System.out.println("Current CNY rate: " + cnyRate);
 		//Апи работает, но я не ебу че нам нужно из него доставать
 
 		//var client = IssClientBuilder.builder().build();
@@ -47,4 +54,3 @@ public class StatMoneyApplication implements CommandLineRunner {
 
 	}
 }
-
