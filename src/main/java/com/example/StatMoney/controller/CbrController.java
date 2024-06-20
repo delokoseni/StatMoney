@@ -15,8 +15,7 @@ public class CbrController {
     private CbrService cbrService;
 
     @GetMapping("/rate/{currencyCode}")
-    public String getCurrencyRate(@PathVariable String currencyCode) {
+    public float getCurrencyRate(@PathVariable String currencyCode) {
         return cbrService.getCurrentCurrencyRate(currencyCode);
     }
 }
-
