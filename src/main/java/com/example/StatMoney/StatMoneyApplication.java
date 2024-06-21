@@ -2,17 +2,23 @@ package com.example.StatMoney;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.StatMoney.service.CbrService;
+import com.example.StatMoney.service.MoexService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.exdata.moex.IssClientBuilder;
 
+import java.util.Map;
+
 @SpringBootApplication
 public class StatMoneyApplication implements CommandLineRunner {
 
     @Autowired
     private CbrService cbrService;
+
+    @Autowired
+    private MoexService moexService;
 
     public static void main(String[] args) {
         SpringApplication.run(StatMoneyApplication.class, args);
@@ -32,26 +38,13 @@ public class StatMoneyApplication implements CommandLineRunner {
         float usdRate = cbrService.getCurrentCurrencyRate("USD");
         System.out.println("Current USD rate: " + usdRate);
 
-        // Пример использования API MOEX
-        // var client = IssClientBuilder.builder().build();
-        // var str = client.iss().index().format().json().get();
-        // System.out.println(str);
+        String ticker = "WUSH";
+        float securityPrice = moexService.getCurrentPrice(ticker);
+        System.out.println("Current price of " + ticker + ": " + securityPrice);
 
-        // Другой пример использования API MOEX с параметрами
-        // var client = IssClientBuilder.builder().build();
-        // var history = client
-        //         .iss()
-        //         .history()
-        //         .engines()
-        //         .engine("stock")
-        //         .markets()
-        //         .market("shares")
-        //         .boards()
-        //         .board("TQBR")
-        //         .securities()
-        //         .security("sber")
-        //         .format().json() // Выбираем формат JSON
-        //         .get(Map.of("from", "2020-01-03", "till", "2020-10-03")); // Задаем параметры и выполняем запрос
-        // System.out.println(history);
+        ticker = "SBER";
+        securityPrice = moexService.getCurrentPrice(ticker);
+        System.out.println("Current price of " + ticker + ": " + securityPrice);
+
     }
 }
