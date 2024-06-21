@@ -15,4 +15,11 @@ public class User {
     private String email;
     private String password;
     private String role;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.role == null) {
+            this.role = "ROLE_USER";
+        }
+    }
 }
