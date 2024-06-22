@@ -1,5 +1,8 @@
 package com.example.StatMoney.service;
 
+
+import com.example.StatMoney.service.CbrService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,13 +19,16 @@ public class MoexService {
 
     private final IssClient client;
 
+    @Autowired
+    private CbrService cbrService;
+
     public MoexService() {
         this.client = IssClientBuilder.builder().build();
     }
 
     public float getCurrentPrice(String ticker) {
         try {
-            // Подготовка запроса к API МосБиржи
+            //Подготовка запроса к API МосБиржи
             var response = client.iss()
                     .engines()
                     .engine("stock")
@@ -33,8 +39,30 @@ public class MoexService {
                     .format().xml() // Изменяем формат на XML
                     .get(Map.of("limit", "1"));
 
-            // Извлечь данные из раздела 'data' в XML
+            //Извлечь данные из раздела 'data' в XML
             return parsePriceFromResponse(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public float getCurrentBondPrice(String bondIdentifier) {
+        try {
+            // Подготовка запроса к API МосБиржи
+            var response = client.iss()
+                    .engines()
+                    .engine("stock")
+                    .markets()
+                    .market("bonds")  //Рынок облигаций
+                    .securities()
+                    .security(bondIdentifier)
+                    .format().xml()
+                    .get(Map.of("limit", "1"));
+
+            //Извлечь данные из раздела 'data' в XML
+            return parsePriceFromResponse(response) * 10; //В таблице API все числа, возможно, умножены на 0,1
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,14 +77,30 @@ public class MoexService {
             Document doc = builder.parse(new java.io.ByteArrayInputStream(xmlResponse.getBytes("UTF-8")));
             NodeList rows = doc.getElementsByTagName("row");
 
+            float currentPrice = 0;
+            String currency = "SUR"; //Предполагаем, что валюта по умолчанию рубли
+
             for (int i = 0; i < rows.getLength(); i++) {
                 Element row = (Element) rows.item(i);
-                // Предположим что LCURRENTPRICE это цена текущей линии
+                //Извлекаем валюту
+                String currencyStr = row.getAttribute("CURRENCYID");
+                if (currencyStr != null && !currencyStr.isEmpty()) {
+                    currency = currencyStr;
+                }
+                //Извлекаем текущую цену
                 String currentPriceStr = row.getAttribute("LCURRENTPRICE");
                 if (currentPriceStr != null && !currentPriceStr.isEmpty()) {
-                    return Float.parseFloat(currentPriceStr);
+                    currentPrice = Float.parseFloat(currentPriceStr);
                 }
             }
+
+            //Если валюта не рубли, переводим в рубли
+            if (!currency.equals("SUR")) {
+                float currencyRate = cbrService.getCurrentCurrencyRate(currency);
+                currentPrice *= currencyRate;
+            }
+
+            return currentPrice;
         } catch (Exception e) {
             e.printStackTrace();
         }

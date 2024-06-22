@@ -46,5 +46,14 @@ public class StatMoneyApplication implements CommandLineRunner {
         securityPrice = moexService.getCurrentPrice(ticker);
         System.out.println("Current price of " + ticker + ": " + securityPrice);
 
+        //Облигации ГК Самолет выпуск 11
+        String securityCode = "RU000A104JQ3";
+        securityPrice = moexService.getCurrentBondPrice(securityCode);
+        System.out.println("Current price of " + securityCode + ": " + securityPrice);
+
+        //Облигации Норильский Никель БО (курс в Юанях, но переведён в рубли)
+        securityCode = "RU000A105NL3";
+        securityPrice = moexService.getCurrentBondPrice(securityCode);
+        System.out.println("Current price of " + securityCode + ": " + securityPrice);
     }
 }
