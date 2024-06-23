@@ -36,9 +36,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/").permitAll()
-                        .requestMatchers("/**").authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/register", "/").permitAll()
+                        .requestMatchers("/main", "/add").authenticated()
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .defaultSuccessUrl("/add", true)  // Перенаправление после успешного входа
+                        .permitAll())
                 .build();
     }
     @Bean
