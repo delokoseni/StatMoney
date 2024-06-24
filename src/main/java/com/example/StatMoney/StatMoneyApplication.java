@@ -3,6 +3,7 @@ package com.example.StatMoney;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.StatMoney.service.CbrService;
 import com.example.StatMoney.service.MoexService;
+import com.example.StatMoney.service.CryptoCompareService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,17 +21,15 @@ public class StatMoneyApplication implements CommandLineRunner {
     @Autowired
     private MoexService moexService;
 
+    @Autowired
+    private CryptoCompareService cryptoCompareService;
+
     public static void main(String[] args) {
         SpringApplication.run(StatMoneyApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
-        String encodePass = passwordEncoder.encode("maksim");
-        System.out.println("Encoded password: " + encodePass);
-        String encodePass2 = passwordEncoder.encode("maksim");
-        System.out.println("Encoded password: " + encodePass2);
 
         float cnyRate = cbrService.getCurrentCurrencyRate("CNY");
         System.out.println("Current CNY rate: " + cnyRate);
@@ -55,5 +54,13 @@ public class StatMoneyApplication implements CommandLineRunner {
         securityCode = "RU000A105NL3";
         securityPrice = moexService.getCurrentBondPrice(securityCode);
         System.out.println("Current price of " + securityCode + ": " + securityPrice);
+
+        String cryptoSymbol = "BTC";
+        float cryptoPrice = cryptoCompareService.getCryptoPrice(cryptoSymbol);
+        System.out.println("Current price of " + cryptoSymbol + ": " + cryptoPrice);
+
+        cryptoSymbol = "1INCH";
+        cryptoPrice = cryptoCompareService.getCryptoPrice(cryptoSymbol);
+        System.out.println("Current price of " + cryptoSymbol + ": " + cryptoPrice);
     }
 }
