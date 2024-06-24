@@ -7,9 +7,8 @@ import com.example.StatMoney.service.CryptoCompareService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.exdata.moex.IssClientBuilder;
 
+import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
@@ -62,5 +61,12 @@ public class StatMoneyApplication implements CommandLineRunner {
         cryptoSymbol = "1INCH";
         cryptoPrice = cryptoCompareService.getCryptoPrice(cryptoSymbol);
         System.out.println("Current price of " + cryptoSymbol + ": " + cryptoPrice);
+
+        //Получение списка всех криптовалют
+        List<Map<String, String>> cryptocurrencies = cryptoCompareService.getAllCryptocurrencies();
+        System.out.println("All cryptocurrencies:");
+        for (Map<String, String> crypto : cryptocurrencies) {
+            System.out.println(crypto.get("fullName") + " - " + crypto.get("symbol"));
+        }
     }
 }
