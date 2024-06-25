@@ -63,24 +63,24 @@ public class StatMoneyApplication implements CommandLineRunner {
         System.out.println("Current price of " + cryptoSymbol + ": " + cryptoPrice);
 
         //Получение списка всех криптовалют
-        List<Map<String, String>> cryptocurrencies = cryptoCompareService.getAllCryptocurrencies();
-        System.out.println("All cryptocurrencies:");
-        for (Map<String, String> crypto : cryptocurrencies) {
-            System.out.println(crypto.get("fullName") + " - " + crypto.get("symbol"));
-        }
+//        List<Map<String, String>> cryptocurrencies = cryptoCompareService.getAllCryptocurrencies();
+//        System.out.println("All cryptocurrencies:");
+//        for (Map<String, String> crypto : cryptocurrencies) {
+//            System.out.println(crypto.get("fullName") + " - " + crypto.get("symbol"));
+//        }
 
         //Все акции с Мосбиржи
-        List<Map<String, String>> shares = moexService.getAllSecurities("shares");
-        System.out.println("All shares:");
-        for (Map<String, String> sh : shares) {
-            System.out.println(sh.get("name") + " - " + sh.get("ticker"));
-        }
+//        List<Map<String, String>> shares = moexService.getAllSecurities("shares");
+//        System.out.println("All shares:");
+//        for (Map<String, String> sh : shares) {
+//            System.out.println(sh.get("name") + " - " + sh.get("ticker"));
+//        }
 
         //Все облигации с мосбиржи
-        List<Map<String, String>> bonds = moexService.getAllSecurities("bonds");
-        System.out.println("All bonds:");
-        for (Map<String, String> bd : bonds) {
-            System.out.println(bd.get("name") + " - " + bd.get("ticker"));
-        }
+//        List<Map<String, String>> bonds = moexService.getAllSecurities("bonds");
+//        System.out.println("All bonds:");
+//        for (Map<String, String> bd : bonds) {
+//            System.out.println(bd.get("name") + " - " + bd.get("ticker"));
+//        }
     }
 }
