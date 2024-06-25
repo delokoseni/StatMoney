@@ -20,4 +20,11 @@ public class MainController {
     {
         return "add-active";
     }
+
+    @GetMapping("/actives")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    String actives()
+    {
+        return "actives";
+    }
 }
