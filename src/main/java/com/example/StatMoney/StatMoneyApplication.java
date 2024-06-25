@@ -6,10 +6,6 @@ import com.example.StatMoney.service.MoexService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.exdata.moex.IssClientBuilder;
-
-import java.util.Map;
 
 @SpringBootApplication
 public class StatMoneyApplication implements CommandLineRunner {
@@ -26,11 +22,6 @@ public class StatMoneyApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
-        String encodePass = passwordEncoder.encode("maksim");
-        System.out.println("Encoded password: " + encodePass);
-        String encodePass2 = passwordEncoder.encode("maksim");
-        System.out.println("Encoded password: " + encodePass2);
 
         float cnyRate = cbrService.getCurrentCurrencyRate("CNY");
         System.out.println("Current CNY rate: " + cnyRate);
