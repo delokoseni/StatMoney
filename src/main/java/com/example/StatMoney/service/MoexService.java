@@ -12,7 +12,8 @@ import ru.exdata.moex.IssClientBuilder;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.util.Map;
+import java.util.*;
+import java.io.ByteArrayInputStream;
 
 @Service
 public class MoexService {
@@ -105,5 +106,50 @@ public class MoexService {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    //Получить список всех shares - акции, bonds - облигации
+    public List<Map<String, String>> getAllSecurities(String market) {
+        try {
+            var response = client.iss()
+                    .engines()
+                    .engine("stock")
+                    .markets()
+                    .market(market)
+                    .securities()
+                    .format().xml()
+                    .get(Map.of());
+
+            return parseSecuritiesFromResponse(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    private List<Map<String, String>> parseSecuritiesFromResponse(String xmlResponse) {
+        Set<String> seenTickers = new HashSet<>();
+        List<Map<String, String>> securities = new ArrayList<>();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(new ByteArrayInputStream(xmlResponse.getBytes("UTF-8")));
+            NodeList rows = doc.getElementsByTagName("row");
+
+            for (int i = 0; i < rows.getLength(); i++) {
+                Element row = (Element) rows.item(i);
+                String shortName = row.getAttribute("SHORTNAME");
+                String secId = row.getAttribute("SECID");
+
+                if (shortName != null && secId != null && !secId.isEmpty() && !seenTickers.contains(secId)) {
+                    securities.add(Map.of("name", shortName, "ticker", secId));
+                    seenTickers.add(secId);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return securities;
     }
 }
