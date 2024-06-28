@@ -18,7 +18,7 @@ public class Asset {
 
     private String name;
     private String category;
-    private Double purchasePriceRub;             // Цена покупки в рублях
-    private Double purchasePriceUsd;             // Цена покупки в долларах
-    private Integer quantity;                    // Количество
+    private double purchasePriceRub;             // Цена покупки в рублях
+    private double purchasePriceUsd;             // Цена покупки в долларах
+    private int quantity;                    // Количество
 }

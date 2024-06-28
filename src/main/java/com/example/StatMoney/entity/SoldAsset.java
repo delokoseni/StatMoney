@@ -9,10 +9,10 @@ import java.util.Date;
 @Entity
 @Table(name = "soldAssets")
 public class SoldAsset extends Asset{
-    private Double sellPriceRub;
-    private Double sellPriceUsd;
-    private Integer sellQuantity;
+    private double sellPriceRub;
+    private double sellPriceUsd;
+    private int sellQuantity;
     private Date sellDate;
-    private Double profitLossRub;
-    private Double profitLossUsd;
+    private double profitLossRub;
+    private double profitLossUsd;
 }

@@ -19,15 +19,15 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Asset> assets;
 
-    private Double totalValueRub;               // Общая стоимость в рублях
-    private Double totalValueUsd;               // Общая стоимость в долларах
+    private double totalValueRub;               // Общая стоимость в рублях
+    private double totalValueUsd;               // Общая стоимость в долларах
 
-    private Double totalProfitLossRub;          // Общий доход/убыток в рублях
-    private Double totalProfitLossUsd;          // Общий доход/убыток в долларах
+    private double totalProfitLossRub;          // Общий доход/убыток в рублях
+    private double totalProfitLossUsd;          // Общий доход/убыток в долларах
 
-    private Double averageDailyIncomeRub;       // Среднедневной доход в рублях
-    private Double averageDailyIncomeUsd;       // Среднедневной доход в долларах
+    private double averageDailyIncomeRub;       // Среднедневной доход в рублях
+    private double averageDailyIncomeUsd;       // Среднедневной доход в долларах
 
-    private Double totalSoldAssetsValueRub;     // Общая стоимость проданных активов в рублях
-    private Double totalSoldAssetsValueUsd;     // Общая стоимость проданных активов в долларах
+    private double totalSoldAssetsValueRub;     // Общая стоимость проданных активов в рублях
+    private double totalSoldAssetsValueUsd;     // Общая стоимость проданных активов в долларах
 }

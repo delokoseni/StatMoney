@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "realEstates")
 public class RealEstate extends Asset{
-    private Double rentalIncomeMonthly;         // Ежемесячный доход от аренды
+    private double rentalIncomeMonthly;         // Ежемесячный доход от аренды
     private String address;
     private Date purchaseDate;
 }

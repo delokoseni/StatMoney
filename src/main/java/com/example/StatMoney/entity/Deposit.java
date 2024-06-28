@@ -9,8 +9,8 @@ import java.util.Date;
 @Table(name = "deposits")
 public class Deposit extends Asset{
     private String bankName;
-    private Double initialAmountRub;      // Начальная сумма в рублях
-    private Double interestRate;          // Процентная ставка
+    private double initialAmountRub;      // Начальная сумма в рублях
+    private double interestRate;          // Процентная ставка
     private Date startDate;
     private Date endDate;
 }

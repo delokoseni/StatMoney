@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "cryptocurrency")
+@Table(name = "cryptocurrencies")
 public class Cryptocurrency extends Asset{
     private String ticker;
 }

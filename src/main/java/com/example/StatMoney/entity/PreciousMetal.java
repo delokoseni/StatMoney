@@ -10,6 +10,6 @@ import java.util.Date;
 @Table(name = "preciousMetals")
 public class PreciousMetal extends Asset{
     private String metalType;
-    private Double quantityGr;
+    private double quantityGr;
     private Date purchaseDate;
 }
