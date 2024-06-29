@@ -7,11 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    @GetMapping("/main")
+    @GetMapping("/dashboard")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    String mainPage()
+    String dashboard()
     {
         return "main-page";
+    }
+
+    @GetMapping("/stats")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    String actives()
+    {
+        return "actives";
     }
 
     @GetMapping("/add")
@@ -21,10 +28,12 @@ public class MainController {
         return "add-active";
     }
 
-    @GetMapping("/actives")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    String actives()
-    {
-        return "actives";
-    }
+
+
+//    @GetMapping("/actives")
+//    @PreAuthorize("hasAuthority('ROLE_USER')")
+//    String dashboard2()
+//    {
+//        return "dashboard";
+//    }
 }

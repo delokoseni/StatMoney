@@ -13,8 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.security.SecureRandom;
-
 
 @Configuration
 @EnableWebSecurity
@@ -40,10 +38,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
-                        .requestMatchers("/main", "/add", "/actives").authenticated()
+                        .requestMatchers("/dashboard", "/add", "/stats").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/actives", true)  // Перенаправление после успешного входа
+                        .defaultSuccessUrl("/stats", true)  // Перенаправление после успешного входа
                         .permitAll())
                 .build();
     }
