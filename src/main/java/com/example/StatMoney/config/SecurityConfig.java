@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/main", "/add", "/actives",  "/portfolio/**").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/actives", true)
+                        .defaultSuccessUrl("/portfolio", true)
                         .permitAll())
                 .build();
     }
