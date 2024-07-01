@@ -35,27 +35,27 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="asset, iterStat : ${assets}">
+        <tr th:each="asset : ${assets}">
             <td th:text="${asset.name}"></td>
-            <td th:text="${assetTickers[asset.id]}"></td>
-            <td th:text="${assetCategoriesRus[asset.id]}"></td>
-            <td th:text="${asset.purchasePriceRub}"></td>
-            <td th:text="${asset.purchasePriceUsd}"></td>
-            <td th:text="${asset.quantity}"></td>
-            <td th:text="${currentPricesRub[asset.id]}"></td>
-            <td th:text="${currentPricesUsd[asset.id]}"></td>
+            <td th:text="${asset.ticker}"></td>
+            <td th:text="${asset.category}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceRub, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.averagePurchasePriceUsd, 1, 2)}"></td>
+            <td th:text="${asset.totalQuantity}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.currentPriceRub, 1, 2)}"></td>
+            <td th:text="${#numbers.formatDecimal(asset.currentPriceUsd, 1, 2)}"></td>
             <td>
-                <span th:if="${profitRub[asset.id] > 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.id], 1, 2)} %|" class="profit-positive"></span>
-                <span th:if="${profitRub[asset.id] < 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.id], 1, 2)} %|" class="profit-negative"></span>
-                <span th:if="${profitRub[asset.id] == 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.id], 1, 2)} %|" class="profit-neutral"></span>
+                <span th:if="${profitRub[asset.ticker] > 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.ticker], 1, 2)} %|" class="profit-positive"></span>
+                <span th:if="${profitRub[asset.ticker] < 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.ticker], 1, 2)} %|" class="profit-negative"></span>
+                <span th:if="${profitRub[asset.ticker] == 0}" th:text="|${#numbers.formatDecimal(profitRub[asset.ticker], 1, 2)} %|" class="profit-neutral"></span>
             </td>
             <td>
-                <span th:if="${profitUsd[asset.id] > 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.id], 1, 2)} %|" class="profit-positive"></span>
-                <span th:if="${profitUsd[asset.id] < 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.id], 1, 2)} %|" class="profit-negative"></span>
-                <span th:if="${profitUsd[asset.id] == 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.id], 1, 2)} %|" class="profit-neutral"></span>
+                <span th:if="${profitUsd[asset.ticker] > 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-positive"></span>
+                <span th:if="${profitUsd[asset.ticker] < 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-negative"></span>
+                <span th:if="${profitUsd[asset.ticker] == 0}" th:text="|${#numbers.formatDecimal(profitUsd[asset.ticker], 1, 2)} %|" class="profit-neutral"></span>
             </td>
             <td>
-                <form th:action="@{/portfolio/delete/{id}(id=${asset.id})}" method="post">
+                <form th:action="@{/portfolio/delete/{id}(id=${asset.ticker})}" method="post">
                     <button type="submit">Удалить</button>
                 </form>
             </td>

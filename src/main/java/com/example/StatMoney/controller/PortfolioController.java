@@ -1,6 +1,7 @@
 package com.example.StatMoney.controller;
 
 import com.example.StatMoney.config.MyUserDetails;
+import com.example.StatMoney.AggregatedAsset;
 import com.example.StatMoney.entity.*;
 import com.example.StatMoney.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,39 +45,44 @@ public class PortfolioController {
             List<Asset> assets = assetService.findByPortfolioId(portfolio.getId());
             float usdToRubRate = cbrService.getCurrentCurrencyRate("USD");
 
-            Map<Long, Float> currentPricesRub = new HashMap<>();
-            Map<Long, Float> currentPricesUsd = new HashMap<>();
-            Map<Long, String> assetTickers = new HashMap<>();
-            Map<Long, String> assetCategoriesRus = new HashMap<>();
-            Map<Long, Float> profitRub = new HashMap<>();
-            Map<Long, Float> profitUsd = new HashMap<>();
-
-            float totalValueRub = 0;
+            Map<String, AggregatedAsset> aggregatedAssetsMap = new HashMap<>();
 
             for (Asset asset : assets) {
                 String ticker = getTickerOfAsset(asset);
+                AggregatedAsset aggregatedAsset = aggregatedAssetsMap.getOrDefault(ticker, new AggregatedAsset());
+                aggregatedAsset.setTicker(ticker);
+                aggregatedAsset.setName(asset.getName());
+                aggregatedAsset.setCategory(getRussianCategory(asset.getCategory()));
+                aggregatedAsset.setTotalQuantity(aggregatedAsset.getTotalQuantity() + asset.getQuantity());
+                aggregatedAsset.setAveragePurchasePriceRub(
+                        (float) ((aggregatedAsset.getAveragePurchasePriceRub() * (aggregatedAsset.getTotalQuantity() - asset.getQuantity())
+                                + asset.getPurchasePriceRub() * asset.getQuantity()) / aggregatedAsset.getTotalQuantity()));
+                aggregatedAsset.setAveragePurchasePriceUsd(
+                        (float) ((aggregatedAsset.getAveragePurchasePriceUsd() * (aggregatedAsset.getTotalQuantity() - asset.getQuantity())
+                                + asset.getPurchasePriceUsd() * asset.getQuantity()) / aggregatedAsset.getTotalQuantity()));
+
                 float currentPriceRub = getCurrentAssetPrice(asset);
-                float currentPriceUsd = currentPriceRub / usdToRubRate;
-                float purchasePriceRub = (float) asset.getPurchasePriceRub() * asset.getQuantity();
-                float profitRubPercent = ((currentPriceRub - (float) asset.getPurchasePriceRub()) / (float) asset.getPurchasePriceRub()) * 100;
-                float purchasePriceUsd = (float) asset.getPurchasePriceUsd() * asset.getQuantity();
-                float profitUsdPercent = ((currentPriceUsd - (float) asset.getPurchasePriceUsd()) / (float) asset.getPurchasePriceUsd()) * 100;
+                aggregatedAsset.setCurrentPriceRub(currentPriceRub);
+                aggregatedAsset.setCurrentPriceUsd(currentPriceRub / usdToRubRate);
 
-                assetTickers.put(asset.getId(), ticker);
-                currentPricesRub.put(asset.getId(), currentPriceRub);
-                currentPricesUsd.put(asset.getId(), currentPriceUsd);
-                assetCategoriesRus.put(asset.getId(), getRussianCategory(asset.getCategory()));
-                profitRub.put(asset.getId(), profitRubPercent);
-                profitUsd.put(asset.getId(), profitUsdPercent);
-
-                totalValueRub += currentPriceRub * asset.getQuantity();
+                aggregatedAssetsMap.put(ticker, aggregatedAsset);
             }
 
-            model.addAttribute("assets", assets);
-            model.addAttribute("currentPricesRub", currentPricesRub);
-            model.addAttribute("currentPricesUsd", currentPricesUsd);
-            model.addAttribute("assetTickers", assetTickers);
-            model.addAttribute("assetCategoriesRus", assetCategoriesRus);
+            Map<String, Float> profitRub = new HashMap<>();
+            Map<String, Float> profitUsd = new HashMap<>();
+            float totalValueRub = 0;
+
+            for (AggregatedAsset asset : aggregatedAssetsMap.values()) {
+                float profitRubPercent = ((asset.getCurrentPriceRub() - asset.getAveragePurchasePriceRub()) / asset.getAveragePurchasePriceRub()) * 100;
+                float profitUsdPercent = ((asset.getCurrentPriceUsd() - asset.getAveragePurchasePriceUsd()) / asset.getAveragePurchasePriceUsd()) * 100;
+
+                profitRub.put(asset.getTicker(), profitRubPercent);
+                profitUsd.put(asset.getTicker(), profitUsdPercent);
+
+                totalValueRub += asset.getCurrentPriceRub() * asset.getTotalQuantity();
+            }
+
+            model.addAttribute("assets", aggregatedAssetsMap.values());
             model.addAttribute("profitRub", profitRub);
             model.addAttribute("profitUsd", profitUsd);
             model.addAttribute("totalValueRub", totalValueRub);
