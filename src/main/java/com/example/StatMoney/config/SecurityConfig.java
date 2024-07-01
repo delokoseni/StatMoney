@@ -36,12 +36,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/").permitAll()
-                        .requestMatchers("/favicon.ico").permitAll()
-                        .requestMatchers("/dashboard", "/add", "/stats").authenticated()
+                        .requestMatchers("/register", "/", "/favicon.ico").permitAll()
+                        .requestMatchers("/main", "/add", "/actives",  "/portfolio/**").authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/stats", true)  // Перенаправление после успешного входа
+                        .defaultSuccessUrl("/portfolio", true)
                         .permitAll())
                 .build();
     }

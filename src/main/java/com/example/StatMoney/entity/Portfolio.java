@@ -2,7 +2,8 @@ package com.example.StatMoney.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.Set;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -17,7 +18,7 @@ public class Portfolio {
     private User user;
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Asset> assets;
+    private List<Asset> assets;
 
     private double totalValueRub;               // Общая стоимость в рублях
     private double totalValueUsd;               // Общая стоимость в долларах
