@@ -44,4 +44,8 @@ public class AssetService {
     public void deleteAsset(Long id) {
         assetRepository.deleteById(id);
     }
+
+    public List<Asset> findByPortfolioId(Long portfolioId) {
+        return assetRepository.findByPortfolioId(portfolioId);
+    }
 }
